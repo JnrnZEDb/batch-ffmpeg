@@ -1,0 +1,51 @@
+﻿<Window x:Class="batch_ffmpeg.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:batch_ffmpeg"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate x:Key="ListBoxDataTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="6*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Path=Name}" Grid.Column="0"/>
+                <TextBlock Text="{Binding Path=Extension}" Grid.Column="1" Padding="5,0,0,0"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lb_filelist" Grid.Row="0" Grid.ColumnSpan="4" Drop="lb_filelist_Drop" MouseDown="lb_filelist_MouseDown" SelectionChanged="lb_filelist_SelectionChanged"  ItemTemplate="{DynamicResource ListBoxDataTemplate}"/>
+        <TextBox x:Name="tb_1" Grid.Row="1" Grid.ColumnSpan="4" TextWrapping="Wrap" Text="Drag files in to top box then select them one at a time in the bottom box"/>
+
+        <TextBlock x:Name="tblk_exeddirlabel" Grid.Row="2" Grid.Column="0" Text="ffmpeg location:"/>
+        <TextBox x:Name="tb_exedir" Grid.Row="2" Grid.Column="1"  Grid.ColumnSpan="2" Text="C:\Users\M\bin\ffmpeg.exe"/>
+        <Button x:Name="btn_setexedir" Grid.Row="2" Grid.Column="3" Click="btn_setexedir_Click">SET</Button>
+
+        <TextBlock x:Name="tblk_outputloclabel" Grid.Row="3" Grid.Column="0" Text="output to:"/>
+        <TextBox x:Name="tb_outputloc" Grid.Row="3" Grid.Column="1"  Grid.ColumnSpan="2" Text="C:\Users\M\bin\"/>
+        <Button x:Name="btn_setoutputloc" Grid.Row="3" Grid.Column="3" Click="btn_setoutputloc_Click">SET</Button>
+
+
+        <Button x:Name="btn_go" Grid.Row="4" Grid.Column="3" Click="btn_go_Click">GO</Button>
+    </Grid>
+
+</Window>
