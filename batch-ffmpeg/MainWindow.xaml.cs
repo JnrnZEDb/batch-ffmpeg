@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Microsoft.Win32;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -42,8 +44,9 @@ namespace batch_ffmpeg
 
         public void goConvert(System.IO.FileInfo fi, string outdir)
         {
+
             //make sure something is selected
-            if(fi != null)
+            if (fi != null)
             {
                 //ensure output path ends in a backslash
                 if (outdir.Substring(outdir.Length -1, 1) != @"\") { outdir += @"\"; }
@@ -62,7 +65,7 @@ namespace batch_ffmpeg
 
         }
 
-        private void lb_filelist_Drop(object sender, DragEventArgs e)
+        private void lb_filelist_Drop(object sender, System.Windows.DragEventArgs e)
         {
             /*
             //check what formats are available
@@ -75,9 +78,9 @@ namespace batch_ffmpeg
             */
 
             //check whether filedrop data is present (or can be converted to)
-            if(e.Data.GetDataPresent(DataFormats.FileDrop, true))
+            if(e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop, true))
             {
-                string[] filenamearray = e.Data.GetData(DataFormats.FileDrop) as string[];
+                string[] filenamearray = e.Data.GetData(System.Windows.DataFormats.FileDrop) as string[];
                 for (int i = 0; i < filenamearray.Length; i++)
                 {
                     fileinfolist.Add(new System.IO.FileInfo(filenamearray[i]));
@@ -98,20 +101,46 @@ namespace batch_ffmpeg
 
         private void btn_go_Click(object sender, RoutedEventArgs e)
         {
-            if (lb_filelist.SelectedItem != null && tb_outputloc.Text != "")
+            //iterate through the listbox calling goConvert on each item
+            if (lb_filelist.Items != null && tb_outputloc.Text != "")
             {
-                goConvert(lb_filelist.SelectedItem as System.IO.FileInfo, tb_outputloc.Text);
+                for (int i = 0; i < lb_filelist.Items.Count; i++)
+                {
+                    goConvert(lb_filelist.Items[i] as System.IO.FileInfo, tb_outputloc.Text);
+                }
             }
 
         }
 
         private void btn_setexedir_Click(object sender, RoutedEventArgs e)
         {
+            Microsoft.Win32.OpenFileDialog dlg_setexedir = new Microsoft.Win32.OpenFileDialog();
+            dlg_setexedir.FileName = "ffmpeg"; //default filename
+            dlg_setexedir.DefaultExt = ".exe"; //default extension
+            dlg_setexedir.Filter = "Applications|*.exe"; //label|extension
 
+            //show the dialog and if successful then update the text box with the new location
+            bool? result = dlg_setexedir.ShowDialog();
+            if (result == true)
+            {
+                tb_exedir.Text = dlg_setexedir.FileName;
+            }
         }
 
         private void btn_setoutputloc_Click(object sender, RoutedEventArgs e)
         {
+            //have to use winforms' filderbrowserdialog for this instead of the openfiledialog
+            //used for the ffmpeg location because wpf doesnt have a native folder dialog
+            FolderBrowserDialog dlg_setoutputloc = new FolderBrowserDialog();
+            dlg_setoutputloc.Description = "Set output folder.";
+            dlg_setoutputloc.ShowNewFolderButton = true;
+
+            //show the dialog and if successful then update the text box with the new location
+            DialogResult result = dlg_setoutputloc.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                tb_outputloc.Text = dlg_setoutputloc.SelectedPath;
+            }
 
         }
     }
