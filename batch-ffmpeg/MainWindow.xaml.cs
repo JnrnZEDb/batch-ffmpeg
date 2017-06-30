@@ -67,16 +67,6 @@ namespace batch_ffmpeg
 
         private void lb_filelist_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            /*
-            //check what formats are available
-            string[] dformats = e.Data.GetFormats();
-            for (int i = 0; i < dformats.Length; i++)
-            {
-                tb_1.Text += dformats[i] + '\n';
-                //lb_filelist.Items.Add(dformats[i] + '\n');
-            }
-            */
-
             //check whether filedrop data is present (or can be converted to)
             if(e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop, true))
             {
@@ -141,6 +131,43 @@ namespace batch_ffmpeg
             {
                 tb_outputloc.Text = dlg_setoutputloc.SelectedPath;
             }
+
+        }
+
+        private void removeSelectedFromListbox()
+        {
+            //we can't just iterate through selecteditems because we're going to change
+            //the dictionary as we delete things so we need to build a separate copy 
+            //then loop through and remove the items from the datasource 
+
+            //build the copy
+            List<System.IO.FileInfo> itemsToRemove = new List<System.IO.FileInfo>();
+            foreach (System.IO.FileInfo selectedFileInfo in lb_filelist.SelectedItems)
+            {
+                itemsToRemove.Add(selectedFileInfo);
+            }
+            //remove the items
+            foreach (System.IO.FileInfo selectedItemToRemove in itemsToRemove)
+            {
+                fileinfolist.Remove(selectedItemToRemove);
+            }
+        }
+
+        private void lb_filelist_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Back:
+                case Key.Delete:
+                    removeSelectedFromListbox();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void tb_1_TextChanged(object sender, TextChangedEventArgs e)
+        {
 
         }
     }

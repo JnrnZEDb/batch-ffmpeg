@@ -33,8 +33,9 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lb_filelist" Grid.Row="0" Grid.ColumnSpan="4" Drop="lb_filelist_Drop" MouseDown="lb_filelist_MouseDown" SelectionChanged="lb_filelist_SelectionChanged"  ItemTemplate="{DynamicResource ListBoxDataTemplate}"/>
-        <TextBox x:Name="tb_1" Grid.Row="1" Grid.ColumnSpan="4" TextWrapping="Wrap" IsReadOnly="True" Background="LightGray" Text="Drag files into top box."/>
+        <ListBox x:Name="lb_filelist" Grid.Row="0" Grid.ColumnSpan="4" Drop="lb_filelist_Drop" MouseDown="lb_filelist_MouseDown" 
+                 SelectionChanged="lb_filelist_SelectionChanged"  ItemTemplate="{DynamicResource ListBoxDataTemplate}" KeyDown="lb_filelist_KeyDown" SelectionMode="Extended"/>
+        <TextBox x:Name="tb_1" Grid.Row="1" Grid.ColumnSpan="4" TextWrapping="Wrap" IsReadOnly="True" Background="LightGray" Text="Drag files into top box." TextChanged="tb_1_TextChanged"/>
 
         <TextBlock x:Name="tblk_exeddirlabel" Grid.Row="2" Grid.Column="0" Text="ffmpeg location:"/>
         <TextBox x:Name="tb_exedir" Grid.Row="2" Grid.Column="1"  Grid.ColumnSpan="2" Text="C:\Users\M\bin\ffmpeg.exe"/>
